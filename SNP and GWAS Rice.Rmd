@@ -10,13 +10,12 @@ summary(data.geno[,1:20])
 ```
 
 ```{r error=TRUE}
-# Random selection of 2500 SNPs
-data.geno.2500 <-data.geno[,sample(ncol(data.geno),2500)]
+data.geno.2500 <-data.geno[,sample(ncol(data.geno),2500)] # Random selection of 2500 SNPs
 dim(data.geno.2500)
 ```
 
 
-# Creating a MDS plot
+## Creating a MDS plot
 
 ```{r error=TRUE}
 geno.numeric<-data.matrix(data.geno.2500) #convert data matrix to numbers
@@ -27,9 +26,9 @@ geno.mds<-as.data.frame(cmdscale(genDist)) #multi-dimesnional scaling
 head(geno.mds)
 ```
 
-- geno.mds contains genotypic informationrescaled to display in two dimesnions
+- geno.mds contains genotypic information rescaled to display in two dimesnions
 
-# Plot 
+### Plot 
 
 ```{r error=TRUE}
 library(ggplot2)
@@ -38,7 +37,7 @@ pl<-pl+geom_point()
 pl
 ```
 
-#Merge MDS scaled genotype data with the phenotype data by "row.name" column
+### Merge MDS scaled genotype data with the phenotype data by "row.name" column
 
 ```{r error=TRUE}
 data.pheno<- read.csv("./RiceSNPData/RiceDiversity.44K.MSU6.Phenotypes.csv", row.names=1, na.strings=c("NA","00"))
@@ -50,7 +49,7 @@ head(genopheno)
 summary(genopheno)
 ```
 
-# Plots to see if subgroups vary by:
+### Plots to see if subgroups vary by:
 
 ```{r error=TRUE}
 # a) AMYLOSE CONTENT 
@@ -86,7 +85,7 @@ bim <- apply(bim,2,function(x) unique(na.omit(x)))
 bim[,1:5]
 ```
 
-# seperate SNP_id to get chromosome and position 
+### Seperate SNP_id to get chromosome and position 
 
 ```{r error=TRUE}
 bim <- bim %>% 
@@ -96,7 +95,7 @@ bim <- bim %>%
 head(bim)
 ```
 
-# STATISTICAL ANALYSIS: Obtain the mean of the trait for each population
+## STATISTICAL ANALYSIS: Obtain the mean of the trait for each population
 
 ```{r error=TRUE}
 mean(data.pheno.mds$Protein.content,na.rm=T) ##the na.rm argument tells R to ignore missing data coded by "NA"
@@ -104,7 +103,7 @@ mean(data.pheno.mds$Protein.content,na.rm=T) ##the na.rm argument tells R to ign
 tapply(X=data.pheno.mds$Protein.content,INDEX=data.pheno.mds$popID,FUN=min,na.rm=T) #The first argument to tapply() is the data we want to summarize, the second argument is how the data should be split, the third argument is the function we want to apply (min in this case) and the fourth argument are additional arguments to be passed to the function listed in the argument.
 ```
 
-# ANOVA
+### ANOVA
 
 ```{r error=TRUE}
 aov1 <- aov(Protein.content ~ popID,data=data.pheno.mds) #1-way ANOVA for Protein.content by population
@@ -120,7 +119,7 @@ head(snpinfo) #note one column for chromosome and one for position (in base pair
 data.geno <- read.csv("/home/ubuntu/Assignment_4_Singh.Mitali/RiceSNPData/Rice_44K_genotypes.csv.gz", row.names=1, na.strings=c("NA","00")) 
 ```
 
-#Merge genotypic and phenotypic data
+### Merge genotypic and phenotypic data
 ```{r error=TRUE}
 
 head(data.pheno.mds) 
@@ -128,7 +127,7 @@ rownames(data.pheno.mds) <- data.pheno.mds$Row.names
 data.geno.pheno <- merge(data.pheno.mds,data.geno,by="row.names") # merged data
 ```
 
-#Using SNPassoc
+### Using SNPassoc
 ```{r error=TRUE}
 library(SNPassoc)
 data.geno.pheno3 <- data.geno.pheno[,c(1:47,grep("X3_",colnames(data.geno.pheno)))]
@@ -139,19 +138,19 @@ snpinfo3 <- snpinfo[snpinfo$chr==3,] #create new data frames containing only chr
 snps3 <- setupSNP(data.geno.pheno3,48:ncol(data.geno.pheno3),sort=T,info=snpinfo3,sep="")
 ```
 
-#Analysis without Population structure correction
+### GWAS Analysis without Population structure correction
 ```{r error=TRUE}
 wg3 <- WGassociation(Alu.Tol,data=snps3,model="co",genotypingRate=50)
 plot(wg3,print.label.SNPs=FALSE)
 ```
 
-#Comparing expected and observed SNP association in the dataset
+### Comparing expected and observed SNP association in the dataset
 ```{r error=TRUE}
 qqpval(codominant(wg3)) # quantile-quantile plot: codominant(wg3) returns the observed p-values.
 
 ```
 
-#Population Correction
+### GWAS analysis with Population Correction
 ```{r error=TRUE}
 #analysis with population structure correction:
 wg3.corrected <- WGassociation(Alu.Tol ~ pop1 + pop2 + pop3 + pop4,data=snps3,model="co",genotypingRate=50)

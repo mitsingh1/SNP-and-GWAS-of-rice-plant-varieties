@@ -130,13 +130,12 @@ head(data.geno [,1:20])</code></pre>
 <pre><code>## Error in head(data.geno[, 1:20]): object 'data.geno' not found</code></pre>
 <pre class="r"><code>summary(data.geno[,1:20])</code></pre>
 <pre><code>## Error in summary(data.geno[, 1:20]): object 'data.geno' not found</code></pre>
-<pre class="r"><code># Random selection of 2500 SNPs
-data.geno.2500 &lt;-data.geno[,sample(ncol(data.geno),2500)]</code></pre>
+<pre class="r"><code>data.geno.2500 &lt;-data.geno[,sample(ncol(data.geno),2500)] # Random selection of 2500 SNPs</code></pre>
 <pre><code>## Error in eval(expr, envir, enclos): object 'data.geno' not found</code></pre>
 <pre class="r"><code>dim(data.geno.2500)</code></pre>
 <pre><code>## Error in eval(expr, envir, enclos): object 'data.geno.2500' not found</code></pre>
-<div id="creating-a-mds-plot" class="section level1">
-<h1>Creating a MDS plot</h1>
+<div id="creating-a-mds-plot" class="section level2">
+<h2>Creating a MDS plot</h2>
 <pre class="r"><code>geno.numeric&lt;-data.matrix(data.geno.2500) #convert data matrix to numbers</code></pre>
 <pre><code>## Error in is.data.frame(frame): object 'data.geno.2500' not found</code></pre>
 <pre class="r"><code>head(geno.numeric[,1:20])</code></pre>
@@ -148,11 +147,10 @@ data.geno.2500 &lt;-data.geno[,sample(ncol(data.geno),2500)]</code></pre>
 <pre class="r"><code>head(geno.mds)</code></pre>
 <pre><code>## Error in head(geno.mds): object 'geno.mds' not found</code></pre>
 <ul>
-<li>geno.mds contains genotypic informationrescaled to display in two dimesnions</li>
+<li>geno.mds contains genotypic information rescaled to display in two dimesnions</li>
 </ul>
-</div>
-<div id="plot" class="section level1">
-<h1>Plot</h1>
+<div id="plot" class="section level3">
+<h3>Plot</h3>
 <pre class="r"><code>library(ggplot2)
 pl &lt;- ggplot(data=geno.mds, mapping=aes(x=V1, y=V2))</code></pre>
 <pre><code>## Error in ggplot(data = geno.mds, mapping = aes(x = V1, y = V2)): object 'geno.mds' not found</code></pre>
@@ -161,8 +159,8 @@ pl &lt;- ggplot(data=geno.mds, mapping=aes(x=V1, y=V2))</code></pre>
 <pre class="r"><code>pl</code></pre>
 <pre><code>## Error in eval(expr, envir, enclos): object 'pl' not found</code></pre>
 </div>
-<div id="merge-mds-scaled-genotype-data-with-the-phenotype-data-by-row.name-column" class="section level1">
-<h1>Merge MDS scaled genotype data with the phenotype data by “row.name” column</h1>
+<div id="merge-mds-scaled-genotype-data-with-the-phenotype-data-by-row.name-column" class="section level3">
+<h3>Merge MDS scaled genotype data with the phenotype data by “row.name” column</h3>
 <pre class="r"><code>data.pheno&lt;- read.csv(&quot;./RiceSNPData/RiceDiversity.44K.MSU6.Phenotypes.csv&quot;, row.names=1, na.strings=c(&quot;NA&quot;,&quot;00&quot;))</code></pre>
 <pre><code>## Warning in file(file, &quot;rt&quot;): cannot open file './RiceSNPData/RiceDiversity.
 ## 44K.MSU6.Phenotypes.csv': No such file or directory</code></pre>
@@ -178,8 +176,8 @@ pl &lt;- ggplot(data=geno.mds, mapping=aes(x=V1, y=V2))</code></pre>
 <pre class="r"><code>summary(genopheno)</code></pre>
 <pre><code>## Error in summary(genopheno): object 'genopheno' not found</code></pre>
 </div>
-<div id="plots-to-see-if-subgroups-vary-by" class="section level1">
-<h1>Plots to see if subgroups vary by:</h1>
+<div id="plots-to-see-if-subgroups-vary-by" class="section level3">
+<h3>Plots to see if subgroups vary by:</h3>
 <pre class="r"><code># a) AMYLOSE CONTENT 
 
 pl&lt;-ggplot(data=genopheno,mapping=aes(x=V1,y=V2,color=Amylose.content))+scale_color_gradientn(colors=topo.colors(25))</code></pre>
@@ -203,6 +201,7 @@ pl&lt;-ggplot(data=genopheno,mapping=aes(x=V1,y=V2,color=Region))</code></pre>
 <pre class="r"><code>pl</code></pre>
 <pre><code>## Error in eval(expr, envir, enclos): object 'pl' not found</code></pre>
 </div>
+</div>
 <div id="create-the-bim-file" class="section level1">
 <h1>Create the bim file</h1>
 <ul>
@@ -218,9 +217,8 @@ pl&lt;-ggplot(data=genopheno,mapping=aes(x=V1,y=V2,color=Region))</code></pre>
 <pre><code>## Error in apply(bim, 2, function(x) unique(na.omit(x))): object 'bim' not found</code></pre>
 <pre class="r"><code>bim[,1:5]</code></pre>
 <pre><code>## Error in eval(expr, envir, enclos): object 'bim' not found</code></pre>
-</div>
-<div id="seperate-snp_id-to-get-chromosome-and-position" class="section level1">
-<h1>seperate SNP_id to get chromosome and position</h1>
+<div id="seperate-snp_id-to-get-chromosome-and-position" class="section level3">
+<h3>Seperate SNP_id to get chromosome and position</h3>
 <pre class="r"><code>bim &lt;- bim %&gt;% 
   separate(SNP_ID,into = c(&quot;chromosome&quot;,&quot;position&quot;),sep=&quot;_&quot;,remove=FALSE) %&gt;% # create a column for chromosome and position
   select(chromosome, SNP_ID, cM, position, allele1=V1, allele2=V2) # get columns in right order</code></pre>
@@ -228,19 +226,20 @@ pl&lt;-ggplot(data=genopheno,mapping=aes(x=V1,y=V2,color=Region))</code></pre>
 <pre class="r"><code>head(bim)</code></pre>
 <pre><code>## Error in head(bim): object 'bim' not found</code></pre>
 </div>
-<div id="statistical-analysis-obtain-the-mean-of-the-trait-for-each-population" class="section level1">
-<h1>STATISTICAL ANALYSIS: Obtain the mean of the trait for each population</h1>
+<div id="statistical-analysis-obtain-the-mean-of-the-trait-for-each-population" class="section level2">
+<h2>STATISTICAL ANALYSIS: Obtain the mean of the trait for each population</h2>
 <pre class="r"><code>mean(data.pheno.mds$Protein.content,na.rm=T) ##the na.rm argument tells R to ignore missing data coded by &quot;NA&quot;</code></pre>
 <pre><code>## Error in mean(data.pheno.mds$Protein.content, na.rm = T): object 'data.pheno.mds' not found</code></pre>
 <pre class="r"><code>tapply(X=data.pheno.mds$Protein.content,INDEX=data.pheno.mds$popID,FUN=min,na.rm=T) #The first argument to tapply() is the data we want to summarize, the second argument is how the data should be split, the third argument is the function we want to apply (min in this case) and the fourth argument are additional arguments to be passed to the function listed in the argument.</code></pre>
 <pre><code>## Error in tapply(X = data.pheno.mds$Protein.content, INDEX = data.pheno.mds$popID, : object 'data.pheno.mds' not found</code></pre>
-</div>
-<div id="anova" class="section level1">
-<h1>ANOVA</h1>
+<div id="anova" class="section level3">
+<h3>ANOVA</h3>
 <pre class="r"><code>aov1 &lt;- aov(Protein.content ~ popID,data=data.pheno.mds) #1-way ANOVA for Protein.content by population</code></pre>
 <pre><code>## Error in terms.formula(formula, &quot;Error&quot;, data = data): object 'data.pheno.mds' not found</code></pre>
 <pre class="r"><code>summary(aov1)</code></pre>
 <pre><code>## Error in summary(aov1): object 'aov1' not found</code></pre>
+</div>
+</div>
 </div>
 <div id="gwas-analysis" class="section level1">
 <h1>GWAS Analysis</h1>
@@ -259,9 +258,8 @@ head(snpinfo) #note one column for chromosome and one for position (in base pair
 ## Assignment_4_Singh.Mitali/RiceSNPData/Rice_44K_genotypes.csv.gz': No such
 ## file or directory</code></pre>
 <pre><code>## Error in file(file, &quot;rt&quot;): cannot open the connection</code></pre>
-</div>
-<div id="merge-genotypic-and-phenotypic-data" class="section level1">
-<h1>Merge genotypic and phenotypic data</h1>
+<div id="merge-genotypic-and-phenotypic-data" class="section level3">
+<h3>Merge genotypic and phenotypic data</h3>
 <pre class="r"><code>head(data.pheno.mds) </code></pre>
 <pre><code>## Error in head(data.pheno.mds): object 'data.pheno.mds' not found</code></pre>
 <pre class="r"><code>rownames(data.pheno.mds) &lt;- data.pheno.mds$Row.names</code></pre>
@@ -269,8 +267,8 @@ head(snpinfo) #note one column for chromosome and one for position (in base pair
 <pre class="r"><code>data.geno.pheno &lt;- merge(data.pheno.mds,data.geno,by=&quot;row.names&quot;) # merged data</code></pre>
 <pre><code>## Error in merge(data.pheno.mds, data.geno, by = &quot;row.names&quot;): object 'data.pheno.mds' not found</code></pre>
 </div>
-<div id="using-snpassoc" class="section level1">
-<h1>Using SNPassoc</h1>
+<div id="using-snpassoc" class="section level3">
+<h3>Using SNPassoc</h3>
 <pre class="r"><code>library(SNPassoc)</code></pre>
 <pre><code>## Error in library(SNPassoc): there is no package called 'SNPassoc'</code></pre>
 <pre class="r"><code>data.geno.pheno3 &lt;- data.geno.pheno[,c(1:47,grep(&quot;X3_&quot;,colnames(data.geno.pheno)))]</code></pre>
@@ -282,20 +280,20 @@ head(snpinfo) #note one column for chromosome and one for position (in base pair
 snps3 &lt;- setupSNP(data.geno.pheno3,48:ncol(data.geno.pheno3),sort=T,info=snpinfo3,sep=&quot;&quot;)</code></pre>
 <pre><code>## Error in setupSNP(data.geno.pheno3, 48:ncol(data.geno.pheno3), sort = T, : could not find function &quot;setupSNP&quot;</code></pre>
 </div>
-<div id="analysis-without-population-structure-correction" class="section level1">
-<h1>Analysis without Population structure correction</h1>
+<div id="gwas-analysis-without-population-structure-correction" class="section level3">
+<h3>GWAS Analysis without Population structure correction</h3>
 <pre class="r"><code>wg3 &lt;- WGassociation(Alu.Tol,data=snps3,model=&quot;co&quot;,genotypingRate=50)</code></pre>
 <pre><code>## Error in WGassociation(Alu.Tol, data = snps3, model = &quot;co&quot;, genotypingRate = 50): could not find function &quot;WGassociation&quot;</code></pre>
 <pre class="r"><code>plot(wg3,print.label.SNPs=FALSE)</code></pre>
 <pre><code>## Error in plot(wg3, print.label.SNPs = FALSE): object 'wg3' not found</code></pre>
 </div>
-<div id="comparing-expected-and-observed-snp-association-in-the-dataset" class="section level1">
-<h1>Comparing expected and observed SNP association in the dataset</h1>
+<div id="comparing-expected-and-observed-snp-association-in-the-dataset" class="section level3">
+<h3>Comparing expected and observed SNP association in the dataset</h3>
 <pre class="r"><code>qqpval(codominant(wg3)) # quantile-quantile plot: codominant(wg3) returns the observed p-values.</code></pre>
 <pre><code>## Error in qqpval(codominant(wg3)): could not find function &quot;qqpval&quot;</code></pre>
 </div>
-<div id="population-correction" class="section level1">
-<h1>Population Correction</h1>
+<div id="gwas-analysis-with-population-correction" class="section level3">
+<h3>GWAS analysis with Population Correction</h3>
 <pre class="r"><code>#analysis with population structure correction:
 wg3.corrected &lt;- WGassociation(Alu.Tol ~ pop1 + pop2 + pop3 + pop4,data=snps3,model=&quot;co&quot;,genotypingRate=50)</code></pre>
 <pre><code>## Error in WGassociation(Alu.Tol ~ pop1 + pop2 + pop3 + pop4, data = snps3, : could not find function &quot;WGassociation&quot;</code></pre>
@@ -309,6 +307,7 @@ plot(wg3.corrected,print.label.SNPs=FALSE)</code></pre>
 <ul>
 <li>There is a significant amount of difference in the output before and after population correction. There were a lot more SNPs before population correction (false positives)</li>
 </ul>
+</div>
 </div>
 
 
